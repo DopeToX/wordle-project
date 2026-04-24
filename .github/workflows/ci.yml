@@ -1,0 +1,23 @@
+name: Run main.py on self-hosted runner
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: self-hosted
+    steps:
+      - name: Pull latest into cicdclone
+        shell: cmd
+        working-directory: C:\Users\23-017284\Desktop\cicdclone\cicdtest
+        run: |
+          git fetch origin
+          git reset --hard origin/main
+
+      - name: Run main.py in a new terminal window
+        shell: cmd
+        working-directory: C:\Users\23-017284\Desktop\cicdclone\cicdtest
+        run: start "main.py" cmd /k python main.py
