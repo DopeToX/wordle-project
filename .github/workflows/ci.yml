@@ -1,5 +1,3 @@
-name: Run main.py on self-hosted runner
-
 on:
   push:
     branches:
@@ -10,14 +8,9 @@ jobs:
   run:
     runs-on: self-hosted
     steps:
-      - name: Pull latest into cicdclone
+      - name: Pull latest into wordle-project
         shell: cmd
-        working-directory: C:\Users\23-017284\Desktop\cicdclone\cicdtest
+        working-directory: C:\Users\23-017284\Desktop\wordle_cicd_m\wordle-project
         run: |
           git fetch origin
           git reset --hard origin/main
-
-      - name: Run main.py in a new terminal window
-        shell: cmd
-        working-directory: C:\Users\23-017284\Desktop\cicdclone\cicdtest
-        run: start "main.py" cmd /k python main.py
