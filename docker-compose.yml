@@ -34,9 +34,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+    restart: unless-stopped
 
   client:
     build: ./client
@@ -44,6 +42,7 @@ services:
       - "3000:80"
     depends_on:
       - server
+    restart: unless-stopped
 
 volumes:
   postgres_data:
