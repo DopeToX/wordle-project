@@ -9,7 +9,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 const MAX_TRIES = 6;
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
   const [lang, setLang] = useState(localStorage.getItem("language") || "en");
@@ -53,7 +52,7 @@ function App() {
 
   // Requests a random word from the backend, which now reads words from PostgreSQL.
   const fetchRandomWord = async () => {
-    const response = await fetch(`${API_BASE_URL}/api/words/random`);
+    const response = await fetch("/api/words/random");
     const data = await response.json();
 
     if (!response.ok || !data.word) {
@@ -98,11 +97,11 @@ function App() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile`, {
+        const response = await fetch("/api/profile", {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
         if (!response.ok) {
           throw new Error("Session expired");
@@ -126,7 +125,7 @@ function App() {
     setLoading(true);
     try {
       const endpoint = authMode === "login" ? "/api/login" : "/api/register";
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -224,7 +223,7 @@ function App() {
       savedGameResultRef.current = true;
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/stats`, {
+        const response = await fetch("/api/stats", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
