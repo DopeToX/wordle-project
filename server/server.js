@@ -135,7 +135,7 @@ async function authenticate(req, res, next) {
 }
 
 // routes
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -179,7 +179,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -203,11 +203,11 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.get('/profile', authenticate, (req, res) => {
+app.get('/api/profile', authenticate, (req, res) => {
   res.json(formatProfile(req.user));
 });
 
-app.get('/words/random', async (req, res) => {
+app.get('/api/words/random', async (req, res) => {
   try {
     const word = await getRandomWord();
 
@@ -221,7 +221,7 @@ app.get('/words/random', async (req, res) => {
   }
 });
 
-app.post('/stats', authenticate, async (req, res) => {
+app.post('/api/stats', authenticate, async (req, res) => {
   try {
     const { won } = req.body;
 

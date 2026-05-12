@@ -58,16 +58,11 @@ export async function initializeDatabase() {
   await pool.query(`
     INSERT INTO wordle_words (word)
     VALUES
-      ('MUSIC'),
-      ('GAMES'),
-      ('REACT'),
-      ('PLANT'),
-      ('CHAIN'),
-      ('STONE'),
-      ('PHONE'),
-      ('WORLD'),
-      ('HEART'),
-      ('EARTH')
+      ('SLARK'),
+      ('MANGO'),
+      ('PUDGE'),
+      ('RUBIK'),
+      ('ARCWA')
     ON CONFLICT (word) DO NOTHING;
   `);
 }

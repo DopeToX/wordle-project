@@ -20,17 +20,3 @@ CREATE TABLE IF NOT EXISTS wordle_words (
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
-INSERT INTO wordle_words (word)
-VALUES
-  ('MUSIC'),
-  ('GAMES'),
-  ('REACT'),
-  ('PLANT'),
-  ('CHAIN'),
-  ('STONE'),
-  ('PHONE'),
-  ('WORLD'),
-  ('HEART'),
-  ('EARTH')
-ON CONFLICT (word) DO NOTHING;

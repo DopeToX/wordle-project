@@ -53,7 +53,7 @@ function App() {
 
   // Requests a random word from the backend, which now reads words from PostgreSQL.
   const fetchRandomWord = async () => {
-    const response = await fetch(`${API_BASE_URL}/words/random`);
+    const response = await fetch(`${API_BASE_URL}/api/words/random`);
     const data = await response.json();
 
     if (!response.ok || !data.word) {
@@ -98,7 +98,7 @@ function App() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/profile`, {
+        const response = await fetch(`${API_BASE_URL}/api/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -125,7 +125,7 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const endpoint = authMode === "login" ? "/login" : "/register";
+      const endpoint = authMode === "login" ? "/api/login" : "/api/register";
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -224,7 +224,7 @@ function App() {
       savedGameResultRef.current = true;
 
       try {
-        const response = await fetch(`${API_BASE_URL}/stats`, {
+        const response = await fetch(`${API_BASE_URL}/api/stats`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
