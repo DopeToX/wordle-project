@@ -13,6 +13,11 @@ const SECRET_KEY = process.env.SECRET_KEY || 'SecretKey';
 app.use(cors());
 app.use(express.json());
 
+// Simple health check route
+app.get('/', (req, res) => {
+  res.json({ message: 'Wordle API is running!' });
+});
+
 // jwn token
 function createToken(user) {
   return jwt.sign({ userId: user.id, username: user.username }, SECRET_KEY, { expiresIn: '7d' });
