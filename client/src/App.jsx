@@ -28,17 +28,11 @@ function App() {
   const [submittedRows, setSubmittedRows] = useState([]);
   const savedGameResultRef = useRef(false);
 
-  // Short helper for translated UI text. It keeps JSX cleaner by hiding translation lookup details.
   const t = (key, params) => getTranslation(lang, key, params);
-
-  // Updates the current language and saves it in localStorage so refreshes keep the same choice.
   const handleLanguageChange = (newLang) => {
     setLang(newLang);
     localStorage.setItem("language", newLang);
   };
-
-  // Central reset helper so initial load and "play again" use the same setup logic.
-  // It replaces the word and clears all board progress for a fresh round.
   const startNewGame = (nextWord) => {
     setWord(nextWord);
     setBoard(getEmptyBoard(MAX_TRIES, nextWord.length));
@@ -49,8 +43,6 @@ function App() {
     setSubmittedRows([]);
     savedGameResultRef.current = false;
   };
-
-  // Requests a random word from the backend, which now reads words from PostgreSQL.
   const fetchRandomWord = async () => {
     const response = await fetch("/api/words/random");
     const data = await response.json();
@@ -62,9 +54,7 @@ function App() {
     return data.word;
   };
 
-  // Calculates the visual state of each on-screen keyboard key from already submitted rows.
   const getKeyColor = (letter) => {
-    // Keyboard colors keep the "best" result seen so far: green > yellow > gray.
     let bestColor = null;
     
     for (let rowIdx of submittedRows) {
@@ -87,9 +77,7 @@ function App() {
     return bestColor;
   };
 
-  // Reloads the user profile from the server whenever we have a token, including after refresh.
   useEffect(() => {
-    // If a token exists, fetch the real profile from the server instead of trusting local state.
     const loadProfile = async () => {
       if (!token) {
         setUser(null);
@@ -119,7 +107,6 @@ function App() {
     loadProfile();
   }, [token]);
 
-  // Handles both login and registration form submits and stores the successful auth response.
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -151,7 +138,6 @@ function App() {
     setLoading(false);
   };
 
-  // Clears the local session and resets the game state when the user logs out.
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
@@ -159,8 +145,6 @@ function App() {
     setWord("");
     setBoard(getEmptyBoard(MAX_TRIES, 5));
   };
-
-  // Starts another round by asking the backend for a new random word and resetting the board.
   const resetGame = () => {
     fetchRandomWord()
       .then((nextWord) => {
@@ -170,10 +154,7 @@ function App() {
         alert("Error: " + error.message);
       });
   };
-
-  // Sends one keyboard action into the shared input utility that updates board and game state.
   const handleInput = (key) => {
-    // The actual board-editing rules live in a utility so App stays focused on state wiring.
     handleInputLogic({
       key,
       board,
@@ -190,10 +171,7 @@ function App() {
       setWon
     });
   };
-
-  // Subscribes to the real keyboard so physical key presses work the same as on-screen buttons.
   useEffect(() => {
-    // Listen to physical keyboard input and translate it into the same actions as on-screen keys.
     const handleKey = (e) => {
       if (!word) {
         return;
@@ -212,9 +190,7 @@ function App() {
     return () => window.removeEventListener("keydown", handleKey);
   });
 
-  // After a game ends, sends the win/loss result once and refreshes the stats shown in the UI.
   useEffect(() => {
-    // Persist the finished game's result exactly once, even though React may re-render.
     const saveGameResult = async () => {
       if (!gameOver || !token || savedGameResultRef.current) {
         return;
@@ -248,9 +224,7 @@ function App() {
     saveGameResult();
   }, [gameOver, token, won]);
 
-  // Loads the first playable word after the user profile exists and no current word is active yet.
   useEffect(() => {
-    // After login/profile load, fetch the first playable word for the session.
     if (!user || word) {
       return;
     }

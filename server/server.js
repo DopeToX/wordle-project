@@ -10,7 +10,6 @@ import { initializeDatabase, pool } from './db.js';
 const app = express();
 const PORT = Number(process.env.PORT || 5000);
 
-// ❗ важно: без fallback
 if (!process.env.SECRET_KEY) {
   console.error('SECRET_KEY is missing in environment variables');
   process.exit(1);
@@ -25,7 +24,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'Wordle API is running!' });
 });
 
-// JWT
 function createToken(user) {
   return jwt.sign(
     { userId: user.id, username: user.username },
@@ -33,8 +31,6 @@ function createToken(user) {
     { expiresIn: '7d' }
   );
 }
-
-// DB helpers
 async function findUserByUsername(username) {
   const { rows } = await pool.query(
     `
@@ -90,7 +86,6 @@ async function getRandomWord() {
   return rows[0]?.word || null;
 }
 
-// format
 function formatProfile(user) {
   const plays = Number(user.plays || 0);
   const wins = Number(user.wins || 0);
@@ -109,8 +104,6 @@ function formatProfile(user) {
     },
   };
 }
-
-// auth middleware
 async function authenticate(req, res, next) {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -134,7 +127,6 @@ async function authenticate(req, res, next) {
   }
 }
 
-// routes
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -260,7 +252,6 @@ app.post('/api/stats', authenticate, async (req, res) => {
   }
 });
 
-// START SERVER (FIXED FOR DOCKER)
 initializeDatabase()
   .then(() => {
     app.listen(PORT, '0.0.0.0', () => {

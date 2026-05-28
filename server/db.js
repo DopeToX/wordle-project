@@ -4,7 +4,6 @@ import { Pool } from "pg";
 
 const connectionString = process.env.DATABASE_URL;
 
-// Подключение / доступ к дб через файл .env (dannie k database)
 export const pool = new Pool(
   connectionString
     ? {
@@ -22,7 +21,6 @@ export const pool = new Pool(
 );
 
 export async function initializeDatabase() {
-  // Создание таблицы польз.
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -31,8 +29,6 @@ export async function initializeDatabase() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
-
-  // Создание таблицы для статы для каждого польз.
   await pool.query(`
     CREATE TABLE IF NOT EXISTS user_stats (
       user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
@@ -43,8 +39,6 @@ export async function initializeDatabase() {
       last_played_at TIMESTAMPTZ
     );
   `);
-
-  // Таблица возможных слов
   await pool.query(`
     CREATE TABLE IF NOT EXISTS wordle_words (
       id SERIAL PRIMARY KEY,
@@ -53,8 +47,6 @@ export async function initializeDatabase() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
-
-  // Начальные слова:
   await pool.query(`
     INSERT INTO wordle_words (word)
     VALUES
